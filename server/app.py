@@ -28,7 +28,7 @@ def get_restaurants():
 
 @app.route("/restaurants/<int:id>", methods=["GET"])
 def get_restaurant(id):
-    restaurant = Restaurant.query.get(id)
+    restaurant = db.session.get(Restaurant, id)
     if restaurant:
         restaurant_dict = restaurant.to_dict()
         restaurant_dict["restaurant_pizzas"] = [
@@ -51,7 +51,7 @@ def get_restaurant(id):
 
 @app.route("/restaurants/<int:id>", methods=["DELETE"])
 def delete_restaurant(id):
-    restaurant = Restaurant.query.get(id)
+    restaurant = db.session.get(Restaurant, id)
     if restaurant:
         db.session.delete(restaurant)
         db.session.commit()
@@ -81,7 +81,7 @@ def create_restaurant_pizza():
 
         return jsonify(restaurant_pizza_dict), 201
     except Exception as e:
-        return jsonify({"errors": str(e)}), 400
+        return jsonify({"errors":("validation errors")}), 400
 
 if __name__ == "__main__":
     app.run(port=5555, debug=True)
